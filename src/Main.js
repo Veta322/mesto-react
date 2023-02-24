@@ -2,6 +2,7 @@ import React from 'react';
 
 function Main() {
   return (
+    
     <main className="page__content">
     <section className="profile">
       <div className="profile__avatar">
@@ -42,6 +43,7 @@ function Main() {
       </template>
     </section>
   </main>
+  
   );
 }
   
