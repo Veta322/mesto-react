@@ -1,16 +1,16 @@
 import React from 'react';
+import close from '../images/Close.svg';
 
-
-function ImagePopup() {
+function ImagePopup(props) {
   return (
-    <section class="popup popup-image">
-    <div class="popup__content popup__content_image">
-      <button class="button popup__close close-image" type="button" onClick={onClose}>
-        <img class="popup__close-icon" src={image} alt="крестик"/>
+    <section className={(props.card.isOpen ? `popup popup_open popup-image` : `popup popup-image`)}>
+    <div className="popup__content popup__content_image">
+      <button className="button popup__close close-image" type="button" onClick={props.onClose}>
+        <img className="popup__close-icon" src={close}  alt="крестик"/>
       </button>
-      <div class="open-content">
-        <img class="open-content__image"/>
-        <h2 class="open-content__title"></h2>
+      <div className="open-content">
+        <img className="open-content__image" src={props.card.card.link} alt={props.card.card.name}/>
+        <h2 className="open-content__title">{props.card.card.name}</h2>
       </div>
       </div>
   </section>

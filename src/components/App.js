@@ -2,13 +2,13 @@ import React from 'react';
 import Footer from './Footer.js';
 import Header from './Header.js';
 import Main from './Main.js';
-import PopupWithForm from './PopupWithForm'
+import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup.js';
 function App() {
-
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
 	const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
-
+  const [selectedCard, setSelectedCard] = React.useState({ card: {}, isOpen: false })
 
 	function handleEditAvatarClick() {
 		setIsEditAvatarPopupOpen(true)
@@ -26,16 +26,22 @@ function App() {
 		setIsEditAvatarPopupOpen(false);
 		setIsEditProfilePopupOpen(false);
 		setIsAddPlacePopupOpen(false);
+    setSelectedCard({ ...selectedCard, isOpen: false });
+	}
+
+  function handleCardClick(card) {
+		setSelectedCard({ card, isOpen: true });
 	}
 
     return (
       
-      <body className="page">
+      <div className="page">
       <Header />
        <Main
        onEditProfile={handleEditProfileClick}
        onAddPlace={handleAddPlaceClick}
        onEditAvatar={handleEditAvatarClick}
+       onCardClick={handleCardClick}
        />
        
        <Footer/> 
@@ -110,15 +116,17 @@ function App() {
           name="link"
           id="link" 
           placeholder="Ссылка на картинку"
-          required />
+          required/>
           <span className="popup__error popup__error-add-pic"></span>
-     
         </PopupWithForm>
 
-
+        <ImagePopup
+				card={selectedCard}
+				onClose={closeAllPopups}
+			/>
 
       
-       </body>
+       </div>
     );
   }
   
