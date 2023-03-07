@@ -4,7 +4,11 @@ import Header from "./Header.js";
 import Main from "./Main.js";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup.js";
+import api from "../utils/Api";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+
 function App() {
+  const [currentUser, setCurrentUser] = React.useState({});
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -14,6 +18,45 @@ function App() {
     card: {},
     isOpen: false,
   });
+
+  const [cards, setCards] = React.useState([]);
+
+	React.useEffect(() => {
+		const promises = [api.getInitialCards(), api.getPersonInfo()]
+
+		Promise.all(promises)
+			.then(([resCard, resUser]) => {
+				setCurrentUser(resUser);
+				setCards(resCard);
+			})
+			.catch((error) => {
+				console.log(error)
+			});
+	}, []);
+
+
+  function handleCardLike(card) {
+		const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+		if (!isLiked) {
+			api.likeCard(card._id, !isLiked).then((newCard) => {
+				const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+				setCards(newCards)
+			})
+				.catch((err) => {
+					console.log(err);
+				})
+		} else {
+			api.removelikeCard(card._id, isLiked).then((newCard) => {
+				const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+				setCards(newCards)
+			})
+				.catch((err) => {
+					console.log(err);
+				})
+		}
+	}
+
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -31,25 +74,32 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard({ ...selectedCard, isOpen: false });
+    setSelectedCard({
+      ...selectedCard,
+      isOpen: false,
+    });
   }
 
   function handleCardClick(card) {
-    setSelectedCard({ card, isOpen: true });
+    setSelectedCard({
+      card,
+      isOpen: true,
+    });
   }
 
   return (
     <div className="page">
+      <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
         onCardClick={handleCardClick}
+        cards={cards}
+        onCardLike={handleCardLike}
       />
-
       <Footer />
-
       <PopupWithForm
         title="Редактировать профиль"
         type="edit"
@@ -67,7 +117,7 @@ function App() {
           maxLength="40"
           required
         />
-        <span className="popup__error popup__error-edit-name"></span>
+        <span className="popup__error popup__error-edit-name"> </span>{" "}
         <input
           placeholder="О себе"
           type="text"
@@ -78,8 +128,8 @@ function App() {
           maxLength="200"
           required
         />
-        <span className="popup__error popup__error-edit-job"></span>
-      </PopupWithForm>
+        <span className="popup__error popup__error-edit-job"> </span>{" "}
+      </PopupWithForm>{" "}
       <PopupWithForm
         title="Новое место"
         type="add"
@@ -97,7 +147,7 @@ function App() {
           maxLength="30"
           required
         />
-        <span className="popup__error popup__error-add-title"></span>
+        <span className="popup__error popup__error-add-title"> </span>{" "}
         <input
           type="url"
           className="form__item form__item_type_url"
@@ -106,9 +156,8 @@ function App() {
           placeholder="Ссылка на картинку"
           required
         />
-        <span className="popup__error popup__error-add-pic"></span>
+        <span className="popup__error popup__error-add-pic"> </span>{" "}
       </PopupWithForm>
-
       <PopupWithForm
         title="Обновить аватар"
         type="avatar"
@@ -124,10 +173,10 @@ function App() {
           placeholder="Ссылка на картинку"
           required
         />
-        <span className="popup__error popup__error-add-pic"></span>
+        <span className="popup__error popup__error-add-pic"> </span>{" "}
       </PopupWithForm>
-
-      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />{" "}
+      </CurrentUserContext.Provider>
     </div>
   );
 }
