@@ -57,6 +57,17 @@ function App() {
 		}
 	}
 
+  function handleCardDelete(card) {
+		api.delCard(card._id)
+			.then(() => {
+				const newCards = cards.filter(с => с._id !== card._id)
+				setCards(newCards)
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -98,6 +109,7 @@ function App() {
         onCardClick={handleCardClick}
         cards={cards}
         onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
       />
       <Footer />
       <PopupWithForm

@@ -25,11 +25,17 @@ function Card(props) {
 		props.onCardLike(props.card);
 	  }
 
+function handleDeleteClick(){
+  props.onCardDelete(props.card);
+}
+
   return (
     <div className="element">
+      {!isOwn ? null :
       <button className="button element__delete" type="button">
-        <img className="element__delete-icon" src={trash} alt="мусорка" />
-      </button>
+        <img className="element__delete-icon" src={trash} alt="мусорка"   onClick={handleDeleteClick} />
+      </button>}
+
       <img
         className="element__image"
         src={props.card.link}

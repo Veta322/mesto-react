@@ -5,7 +5,7 @@ import plus from "../images/plus.svg";
 import Card from "./Card.js";
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onCardLike }) {
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onCardLike, onCardDelete }) {
 
 
   const currentUser = React.useContext(CurrentUserContext);
@@ -44,7 +44,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onC
       </section>
       <section className="elements">
         {cards.map((card) => (
-          <Card card={card} onCardClick={onCardClick} key={card._id} onCardLike={onCardLike} />
+          <Card card={card} onCardClick={onCardClick} key={card._id} onCardLike={onCardLike}  onCardDelete={onCardDelete} />
         ))}
       </section>
     </main>
