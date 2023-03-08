@@ -17,7 +17,7 @@ function PopupWithForm(props) {
         >
           <img className="popup__close-icon" src={close} alt="крестик" />
         </button>
-        <form className={`form form-${props.type}`} name={`${props.type}-info`}>
+        <form className={`form form-${props.type}`} name={`${props.type}-info`} onSubmit={props.onSubmit}>
           <h2 className="form__heading">{props.title}</h2>
           <fieldset className="form__input-container">
             {props.children}
