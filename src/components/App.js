@@ -2,12 +2,12 @@ import React from "react";
 import Footer from "./Footer.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup.js";
 import api from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -115,7 +115,6 @@ function App() {
       });
   }
 
-
   function handleUpdateAvatar(data) {
 		api.editAvatar({ avatar: data.avatar }).then((result) => {
 			setCurrentUser(result);
@@ -125,6 +124,17 @@ function App() {
 				console.log(err);
 			})
 	}
+
+  function handleAddPlaceSubmit(data) {
+		api.addNewCard({ name: data.imageName, link: data.imageLink }).then((newCard) => {
+			setCards([newCard, ...cards ]);
+			closeAllPopups();
+		})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -139,39 +149,19 @@ function App() {
           onCardDelete={handleCardDelete}
         />
         <Footer />
+
+
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
         />
-        <PopupWithForm
-          title="Новое место"
-          type="add"
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          submit="Создать"
-        >
-          <input
-            type="text"
-            className="form__item form__item_type_title"
-            name="title"
-            id="add-title"
-            placeholder="Название"
-            minLength="2"
-            maxLength="30"
-            required
-          />
-          <span className="popup__error popup__error-add-title"> </span>{" "}
-          <input
-            type="url"
-            className="form__item form__item_type_url"
-            name="link"
-            id="add-pic"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span className="popup__error popup__error-add-pic"> </span>{" "}
-        </PopupWithForm>
+       <AddPlacePopup
+       isOpen={isAddPlacePopupOpen}
+       onClose={closeAllPopups}
+       onAddPlace={handleAddPlaceSubmit}
+       />
+
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
