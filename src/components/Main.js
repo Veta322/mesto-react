@@ -3,14 +3,18 @@ import pencil from "../images/pencil.svg";
 import plus from "../images/plus.svg";
 
 import Card from "./Card.js";
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onCardLike, onCardDelete,  }) {
-
-
+function Main({
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+  cards,
+  onCardLike,
+  onCardDelete,
+}) {
   const currentUser = React.useContext(CurrentUserContext);
-  
-
 
   return (
     <main className="page__content">
@@ -44,7 +48,13 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onC
       </section>
       <section className="elements">
         {cards.map((card) => (
-          <Card card={card} onCardClick={onCardClick} key={card._id} onCardLike={onCardLike}  onCardDelete={onCardDelete} />
+          <Card
+            card={card}
+            onCardClick={onCardClick}
+            key={card._id}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+          />
         ))}
       </section>
     </main>

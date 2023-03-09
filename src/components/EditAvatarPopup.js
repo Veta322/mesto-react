@@ -3,13 +3,15 @@ import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarRef = React.useRef();
-
+  
   function handleSubmit(e) {
     e.preventDefault();
-
+    
     onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
+    avatarRef.current.value = '';
+    
   }
 
   return (
