@@ -20,11 +20,14 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       imageLink,
     });
 
-    setTimeout(() => {
-      setImageName("");
-      setImageLink("");
-    }, 1000);
   }
+
+  React.useEffect(() => {
+    setImageName('');
+    setImageLink('');
+}, [isOpen]);
+
+
 
   return (
     <PopupWithForm
